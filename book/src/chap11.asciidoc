@@ -1,156 +1,155 @@
 [[chap11]]
-== Dictionaries
+== Dicionários
 
-This chapter presents another built-in type called a dictionary.
+Este capítulo apresenta outra estrutura de dados embutida chamada de dicionário.
 
+=== Um Dicionário é um Mapeamento
 
-=== A Dictionary Is a Mapping
+Um _dicionário_ é como um array, mas mais geral. Em um array, os indíces tem que ser inteiros; em um dicionário eles podem ser (quase) de qualquer tipo.
+(((dicionário)))
 
-A _dictionary_ is like an array, but more general. In an array, the indices have to be integers; in a dictionary they can be (almost) any type.
-(((dictionary)))
+Um dicionário contém uma coleção de indíces, que são chamados de _chaves_, e uma coleção de valores. Cada chave é associada a um único valor. A associação de uma chave e um valor é chamada de _par chave-valor_ ou, as vezes, um item.
+(((chave)))(((valor)))(((par chave-valor)))(((item)))
 
-A dictionary contains a collection of indices, which are called _keys_, and a collection of values. Each key is associated with a single value. The association of a key and a value is called a _key-value pair_ or sometimes an item.
-(((key)))(((value)))(((key-value pair)))(((item)))
+Em linguagem matemática, um dicionário representa um _mapeamento_ de chave para valores, então você também pode dizer que cada chave “é mapeado” para um valor. Como um exemplo, iremos construir um dicionário que mapeia palavras em Português para palavras em Espanhol, então as chaves e os valores são todos strings.
+(((mapeamento)))
 
-In mathematical language, a dictionary represents a _mapping_ from keys to values, so you can also say that each key “maps to” a value. As an example, we’ll build a dictionary that maps from English to Spanish words, so the keys and the values are all strings.
-(((mapping)))
-
-The function +Dict+ creates a new dictionary with no items. Because +Dict+ is the name of a built-in function, you should avoid using it as a variable name.
-(((Dict)))((("type", "Base", "Dict", see="Dict")))
+A função +Dict+ cria um novo dicionário sem items. Como +Dict+ é um nome de uma função embutida, devemos evitar usar ele como um nome de variável.
+(((Dict)))((("tipo", "Base", "Dict", see="Dict")))
 
 [source,@julia-repl-test chap11]
 ----
-julia> eng2sp = Dict()
+julia> por2sp = Dict()
 Dict{Any,Any} with 0 entries
 ----
 
-The kind of dictionary is surrounded by curly braces: the keys are of type +Any+ and also the values are of type +Any+.
-(((curly braces)))((("{}", see="curly braces")))(((Any)))((("type", "Base", "Any", see="Any")))
+O tipo de dicionário é cercado por chaves: as chaves são do tipo +Any+ e os valores também são do tipo +Any+.
+(((chaves)))((("{}", see="chaves")))(((Any)))((("tipo", "Base", "Any", see="Any")))
 
-The dictionary is empty. To add items to the dictionary, you can use square brackets:
-(((square brackets)))
+O dicionário está vazio. Para adicionar items no dicionário, podemos usar os colchetes:
+(((colchetes)))
 
 [source,@julia-repl-test chap11]
 ----
-julia> eng2sp["one"] = "uno";
+julia> por2sp["um"] = "uno";
 
 ----
 
-This line creates an item that maps from the key "one" to the value "uno". If we print the dictionary again, we see a key-value pair with an arrow +pass:[=&gt;]+ between the key and value:
+Essa linha cria um item que mapeia a chave "um" para o valor "uno". Se nós imprimirmos o dicionário novamente, nós vemos o par chave-valor com a flecha +pass:[=&gt;]+ entre a chave e o valor:
 (((pass:[=&gt;])))
 
 [source,@julia-repl-test chap11]
 ----
-julia> eng2sp
+julia> por2sp
 Dict{Any,Any} with 1 entry:
-  "one" => "uno"
+  "um" => "uno"
 ----
 
-This output format is also an input format. For example, you can create a new dictionary with three items:
+Esse formato de resultado também é um formato de entrada. Por exemplo, você pode criar um novo dicionário com três itens:
 
 [source,@julia-repl-test chap11]
 ----
-julia> eng2sp = Dict("one" => "uno", "two" => "dos", "three" => "tres")
+julia> por2sp = Dict("um" => "uno", "dois" => "dos", "três" => "tres")
 Dict{String,String} with 3 entries:
-  "two"   => "dos"
-  "one"   => "uno"
-  "three" => "tres"
+  "dois"   => "dos"
+  "um"   => "uno"
+  "três" => "tres"
 ----
 
-All the initial keys and values are strings, so a +Dict{String,String}+ is created. 
+Todas as chaves e os valores iniciais são strings, então um +Dict{String, String}+ é criado.
 
 [WARNING]
 ====
-The order of the key-value pairs might not be the same. If you type the same example on your computer, you might get a different result. In general, the order of items in a dictionary is unpredictable.
+A ordem do par chave-valor pode não ser a mesma. Se você digitar o mesmo exemplo no seu computador, você pode obter um resultado diferente. Em geral, a ordem dos itens em um dicionário é imprevisível.
 ====
 
-But that’s not a problem because the elements of a dictionary are never indexed with integer indices. Instead, you use the keys to look up the corresponding values:
+Mas isso não é um problema pois os elementos de um dicionário nunca são indexados com indíces inteiros. Ao invés disso, nós usamos as chaves para consultar os valores correspondentes:
 
 [source,@julia-repl-test chap11]
 ----
-julia> eng2sp["two"]
+julia> por2sp["dois"]
 "dos"
 ----
 
-The key "two" always maps to the value "dos" so the order of the items doesn’t matter.
+A chave "dois" sempre é mapeada par ao valor "dos", então a ordem dos itens não importa.
 
-If the key isn’t in the dictionary, you get an exception:
+Se a chave não está no dicionário, nós recebemos uma exceção:
 (((KeyError)))((("error", "Base", "KeyError", see="KeyError")))
 
 [source,@julia-repl-test chap11]
 ----
-julia> eng2sp["four"]
+julia> por2sp["quatro"]
 ERROR: KeyError: key "four" not found
 ----
 
-The +length+ function works on dictionaries; it returns the number of key-value pairs:
+A função +length+ funciona em dicionários; ela retorna o número de pares chave-valor:
 (((length)))
 
 [source,@julia-repl-test chap11]
 ----
-julia> length(eng2sp)
+julia> length(por2sp)
 3
 ----
 
-The function +keys+ returns a collection with the keys of the dictionary:
-(((keys)))((("function", "Base", "keys", see="keys")))
+A função +keys+ retorna uma lista com as chaves do dicionário:
+(((keys)))((("função", "Base", "keys", see="keys")))
 
 [source,@julia-repl-test chap11]
 ----
-julia> ks = keys(eng2sp);
+julia> ks = keys(por2sp);
 
 julia> print(ks)
-["two", "one", "three"]
+["dois", "um", "três"]
 ----
 
-Now you can use the +∈+ operator to see whether something appears as a _key_ in the dictionary:
+Agora você pode usar o operador +∈+ para verificar se algo aparece como uma _chave_ no dicionário:
 (((in)))
 
 [source,@julia-repl-test chap11]
 ----
-julia> "one" ∈ ks
+julia> "um" ∈ ks
 true
 julia> "uno" ∈ ks
 false
 ----
 
-To see whether something appears as a value in a dictionary, you can use the function +values+, which returns a collection of values, and then use the +∈+ operator:
-(((values)))((("function", "Base", "values", see="values")))
+Para verificar se algo aparece como um valor em um dicionário, você pode usar a função +values+, que retorna uma coleção de valores, e em seguida usar o operador +∈+:
+(((valores)))((("função", "Base", "valores", see="valores")))
 
 [source,@julia-repl-test chap11]
 ----
-julia> vs = values(eng2sp);
+julia> vs = values(por2sp);
 
 julia> "uno" ∈ vs
 true
 ----
 
-The +∈+ operator uses different algorithms for arrays and dictionaries. For arrays, it searches the elements of the array in order, as in <<searching>>. As the array gets longer, the search time gets longer in direct proportion.
+O operador +∈+ utiliza algoritmos diferentes para arrays e dicionários. Para arrays, ele busca os elementos do array em ordem, como em <<searching>>. À medida que o array fica maior, o tempo de busca cresce em proporção direta.
 
-For dictionaries, Julia uses an algorithm called a _hash table_ that has a remarkable property: the +∈+ operator takes about the same amount of time no matter how many items are in the dictionary.
-(((hash table)))
+Para dicionários, o Julia usa um algoritmo chamado de _tabela hash_ que possui uma propriedade expecional: o operador +∈+ leva aproximadamente o mesmo não importa quantos itens o dicionário possui.
+(((tabela hash)))
 
 [[dictionary_collection_counters]]
-=== Dictionary as a Collection of Counters
+=== Dicionários como uma Coleção de Contadores
 
-Suppose you are given a string and you want to count how many times each letter appears. There are several ways you could do it:
+Suponha que é dado à você uma string e você gostaria de contar quantas vezes cada letra aparece. Existem muitas maneiras de fazer isso:
 
-* You could create 26 variables, one for each letter of the alphabet. Then you could traverse the string and, for each character, increment the corresponding counter, probably using a chained conditional.
+* Você poderia criar 26 variáveis, um para cada letra do alfabeto. Em seguida você poderia percorrer a string, e para cada caractere, incrementar o contador correspondente, provávelmente usando um condicional encadeado.
 
-* You could create an array with 26 elements. Then you could convert each character to a number (using the built-in function +Int+), use the number as an index into the array, and increment the appropriate counter.
+* Você poderia criar um array com 26 elementos. Em seguida você poderia converter cada caractere para um número (usando a função embutida +Int+), usar o número como um indíce para o array, e incrementar o contador adequado.
 
-* You could create a dictionary with characters as keys and counters as the corresponding values. The first time you see a character, you would add an item to the dictionary. After that you would increment the value of an existing item.
+* Você poderia criar um dicionário com caracteres como chaves e contadores como seus valores correspondentes. A primeira vez que você vê um caractere, você adicionaria um item no dicionário. Após isso você incrementaria o valor de um item existente.
 
-Each of these options performs the same computation, but each of them implements that computation in a different way.
+Cada uma dessas opções efetua o mesmo cálculo, mas cada uma delas implementa este cálculo de maneiras diferentes.
 
-An _implementation_ is a way of performing a computation; some implementations are better than others. For example, an advantage of the dictionary implementation is that we don’t have to know ahead of time which letters appear in the string and we only have to make room for the letters that do appear.
-(((implementation)))
+Uma _implementação_ é uma maneira de efetuar um cálculo; algumas implementações são melhores que outras. Por exemplo, uma vantagem da implementação do dicionário é que nós não temos que saber antecipadamente quais letras aparecem na string, e nós temos que somente criar espaço para as letras que aparecem.
+(((implementação)))
 
-Here is what the code might look like:
+O código pode parecer com algo como:
 
 [source,@julia-setup chap11]
 ----
-function histogram(s)
+function histograma(s)
     d = Dict()
     for c in s
         if c ∉ keys(d)
@@ -163,16 +162,16 @@ function histogram(s)
 end
 ----
 
-The name of the function is +histogram+, which is a statistical term for a collection of counters (or frequencies).
-(((histogram)))((("function", "programmer-defined", "histogram", see="histogram")))
+O nome da função é +histograma+, que é um termo estátistico para uma coleção de contadores (ou frequências).
+(((histograma)))((("função", "definido pelo programador", "histograma", see="histograma")))
 
-The first line of the function creates an empty dictionary. The +for+ loop traverses the string. Each time through the loop, if the character +c+ is not in the dictionary, we create a new item with key +c+ and the initial value +1+ (since we have seen this letter once). If +c+ is already in the dictionary we increment +d[c]+.
+A primeira linha da função cria um dicionário vazio. O loop +for+ percorre a string. Toda vez que o loop é percorrido, se o caractere +c+ não está no dicionário, nós criamos um novo item com a chave +c+ e o valor inicial +1+ (já que nós vimos esta letra uma vez). Se +c+ já está no dicionário, nós incrementamos +d[c]+.
 
-Here’s how it works:
+Funciona da seguinte forma:
 
 [source,@julia-repl-test chap11]
 ----
-julia> h = histogram("brontosaurus")
+julia> h = histograma("brontosaurus")
 Dict{Any,Any} with 8 entries:
   'n' => 1
   's' => 2
@@ -184,14 +183,14 @@ Dict{Any,Any} with 8 entries:
   'b' => 1
 ----
 
-The histogram indicates that the letters +'a'+ and +'b'+ appear once; +'o'+ appears twice, and so on.
+O histograma indica que as letras +'a'+ e +'b'+ aparecem uma vez; +'o'+ aparece duas, e assim em diante.
 
-Dictionaries have a function called +get+ that takes a key and a default value. If the key appears in the dictionary, +get+ returns the corresponding value; otherwise it returns the default value. For example:
-(((get)))((("function", "Base", "get", see="get")))
+Dicionários possuem uma função chamada +get+ que recebe uma chave e uma valor padrão. Se a chave aparece no dicionário, +get+ retorna o valor correspondente; caso contrário ela retorna o valor padrão. Por exemplo:
+(((get)))((("função", "Base", "get", see="get")))
 
 [source,@julia-repl-test chap11]
 ----
-julia> h = histogram("a")
+julia> h = histograma("a")
 Dict{Any,Any} with 1 entry:
   'a' => 1
 julia> get(h, 'a', 0)
@@ -200,40 +199,40 @@ julia> get(h, 'b', 0)
 0
 ----
 
-===== Exercise 11-1
+===== Exercício 11-1
 
-Use +get+ to write +histogram+ more concisely. You should be able to eliminate the +if+ statement.
+Use +get+ para escrever +histograma+ de uma maneira mais concisa. Você deve ser capaz de eliminar a declaração +if+.
 
 
-=== Looping and Dictionaries
+=== Dando Laços e Dicionários
 
-You can traverse the keys of the dictionary in a +for+ statement. For example, +printhist+ prints each key and the corresponding value:
-(((printhist)))((("function", "programmer-defined", "printhist", see="printhist")))
+Você pode percorrer as chaves de um dicionário em uma declaração +for+. Por exemplo, +imprimehist+ exibe cada chave e o seu valor correspondente:
+(((imprimehist)))((("função", "definido pelo programador", "imprimehist", see="imprimehist")))
 
 [source,@julia-setup chap11]
 ----
-function printhist(h)
+function imprimehist(h)
     for c in keys(h)
         println(c, " ", h[c])
     end
 end
 ----
 
-Here’s what the output looks like:
+Aqui está o resultado:
 
 [source,@julia-repl-test chap11]
 ----
-julia> h = histogram("parrot");
+julia> h = histograma("papagaio");
 
-julia> printhist(h)
-a 1
-r 2
-p 1
+julia> imprimehist(h)
+a 3
+g 1
+p 2
+i 1
 o 1
-t 1
 ----
 
-Again, the keys are in no particular order. To traverse the keys in sorted order, you can combine +sort+ and +collect+:
+Novamente, as chaves não estão em nenhuma ordem específica. Para percorrer as chaves em ordem, você pode combinar +sort+ e +collect+:
 (((sort)))(((collect)))
 
 [source,@julia-repl-test chap11]
@@ -241,11 +240,11 @@ Again, the keys are in no particular order. To traverse the keys in sorted order
 julia> for c in sort(collect(keys(h)))
            println(c, " ", h[c])
        end
-a 1
+a 3
+g 1
+i 1
 o 1
-p 1
-r 2
-t 1
+p 2
 ----
 
 
@@ -280,7 +279,7 @@ Here is an example of a successful reverse lookup:
 
 [source,@julia-repl-test chap11]
 ----
-julia> h = histogram("parrot");
+julia> h = histograma("parrot");
 
 julia> key = reverselookup(h, 2)
 'r': ASCII/Unicode U+0072 (category Ll: Letter, lowercase)
@@ -335,7 +334,7 @@ Here is an example:
 
 [source,@julia-repl-test chap11]
 ----
-julia> hist = histogram("parrot");
+julia> hist = histograma("parrot");
 
 julia> inverse = invertdict(hist)
 Dict{Any,Any} with 2 entries:
@@ -505,7 +504,7 @@ function example5()
 end
 ----
 
-For performance reasons, you should declare a global variable constant. You can no longer reassign the variable but if it refers to a mutable value, you can modify the value. 
+For performance reasons, you should declare a global variable constant. You can no longer reassign the variable but if it refers to a mutable value, you can modify the value.
 (((const)))((("keyword", "const", see="const")))(((constant global variable)))
 
 [source,@julia-setup]
@@ -644,7 +643,7 @@ A global variable that can not be reassigned.
 === Exercises
 
 [[ex11-1]]
-===== Exercise 11-2
+===== Exercício 11-2
 
 Write a function that reads the words in _words.txt_ and stores them as keys in a dictionary. It doesn’t matter what the values are. Then you can use the +∈+ operator as a fast way to check whether a string is in the dictionary.
 (((in)))
@@ -652,19 +651,19 @@ Write a function that reads the words in _words.txt_ and stores them as keys in 
 If you did <<ex10-10>>, you can compare the speed of this implementation with the array +∈+ operator and the bisection search.
 
 [[ex11-2]]
-===== Exercise 11-3
+===== Exercício 11-3
 
 Read the documentation of the dictionary function +get!+ and use it to write a more concise version of +invertdict+.
 (((get!)))((("function", "Base", "get!", see="get!")))
 
 [[ex11-3]]
-===== Exercise 11-4
+===== Exercício 11-4
 
 Memoize the Ackermann function from <<ex06-2>> and see if memoization makes it possible to evaluate the function with bigger arguments.
 (((memo)))(((Ackermann function)))
 
 [[ex11-4]]
-===== Exercise 11-5
+===== Exercício 11-5
 
 If you did <<ex10-7>>, you already have a function named +hasduplicates+ that takes an array as a parameter and returns +true+ if there is any object that appears more than once in the array.
 (((hasduplicates)))
@@ -672,7 +671,7 @@ If you did <<ex10-7>>, you already have a function named +hasduplicates+ that ta
 Use a dictionary to write a faster, simpler version of +hasduplicates+.
 
 [[ex11-5]]
-===== Exercise 11-6
+===== Exercício 11-6
 
 Two words are “rotate pairs” if you can rotate one of them and get the other (see +rotateword+ in <<ex08-5>>).
 (((rotateword)))
@@ -680,7 +679,7 @@ Two words are “rotate pairs” if you can rotate one of them and get the other
 Write a program that reads a word array and finds all the rotate pairs.
 
 [[ex11-6]]
-===== Exercise 11-7
+===== Exercício 11-7
 
 Here’s another Puzzler from Car Talk (https://www.cartalk.com/puzzler/browse):
 (((Car Talk)))
@@ -702,4 +701,3 @@ To check whether two words are homophones, you can use the CMU Pronouncing Dicti
 ====
 
 Write a program that lists all the words that solve the Puzzler.
-
